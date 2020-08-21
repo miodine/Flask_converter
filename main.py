@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from os.path import basename, splitext
+import os
 import shutil
 
 
@@ -9,11 +9,12 @@ import shutil
 #            splitext(basename(css['href']))[1] + '\')}}'
 
 
-# TODO: Dodać wszystkie formaty wspierane przez HTML5
-formats = ['.jpg', '.png', '.bmp']
+formats = ['.png', '.bmp', '.jpg', '.jpeg',
+           '.jfif', '.pjpeg', '.pjp', '.svg',
+           '.apng', '.ico,', '.cur', '.tif', '.tiff',
+           '.webp', '.webm', '.mp4', '.mp3']
 
 
-# TODO zmienić nazwę na bardziej oddającą to co to robi xd
 def list_skim(list_of_strings, target_string):
     # If target string is present in the list of strings, return its index
     # if not, return -1
@@ -26,7 +27,60 @@ def list_skim(list_of_strings, target_string):
         return -1
 
 
-# read file
+# GET path and directories:
+path = os.path.dirname(__file__)
+print(path)
+list_dir = os.listdir(path)
+target_dir = path + '\Flask_converter_output'
+
+try:
+    os.mkdir(target_dir)
+except OSError:
+    print("Creation of the directory %s failed" % path)
+    print("Directory already exist!")
+    exit()
+else:
+    print("Successfully created the directory %s " % path)
+
+try:
+    os.mkdir(target_dir + "\\templates")
+except OSError:
+    print("Creation of the directory %s failed" % path)
+    print("Directory already exist!")
+    exit()
+else:
+    print("Successfully created the directory %s " % path)
+
+try:
+    os.mkdir(target_dir + '\\static')
+except OSError:
+    print("Creation of the directory %s failed" % path)
+    print("Directory already exist!")
+    exit()
+else:
+    print("Successfully created the directory %s " % path)
+
+
+htmls = {}
+
+
+for i in list_dir:
+    if '.html' in str(i):
+        f = open(path + "\\" + i, 'r')
+        htmls.update({i: f.read()})
+        f.close()
+        shutil.copy(path + '\\' + i, target_dir + "\\templates")
+        continue
+
+    elif '.txt' in i:
+        shutil.copy(path + '\\' + i, target_dir + "\\")
+        continue
+    elif ('.py' or '\Flask_converter') in i:
+        continue
+    else:
+        shutil.copytree(path + "\\" + i, target_dir + '\\static\\' + i)
+
+
 f = open('index.html', 'r')
 html_in = f.read()
 f.close()
@@ -37,7 +91,7 @@ soup = BeautifulSoup(html_in, 'html.parser')
 for img in soup.findAll('img'):
     if ("https://" or "http://") in str(img):
         continue
-    img['src'] = '{{url_for(\'static\', filename = \'img/' + \
+    img['src'] = '{{url_for(\'static\', filename = ' + \
         img['src'] + '\')}}'
 
 
@@ -65,8 +119,7 @@ for a in soup.findAll('a'):
         for j in range(len(list(a.attrs.values()))):
             if formats[i] in list(a.attrs.values())[j]:
                 attribute_name = list(a.attrs.keys())[j]
-
-                a[attribute_name] = '{{url_for(\'static\', filename = \'img/' + \
+                a[attribute_name] = '{{url_for(\'static\', filename = ' + \
                     a[attribute_name] + '\')}}'
 
                 print(a[attribute_name])
