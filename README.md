@@ -19,13 +19,12 @@ preparation)
 
 It kind of does not. It works 90% of 50% of times. But, it should work rather nicely, provided that your soruce website is structured like this:
 
-* MAIN_DIRECTORY:
-
- * -->html_src_1.html
- * -->html_src_2.html
- * -->html_src_3.html
- * ...
-* -->html_src_n.html
+MAIN_DIRECTORY:  
+-->html_src_1.html  
+-->html_src_2.html  
+-->html_src_3.html  
+...
+-->html_src_n.html
 * ...
 * -->some_assets:
 * ---->pictures_n_stuff:
