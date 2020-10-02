@@ -3,10 +3,7 @@ import os
 import shutil
 from html5print import HTMLBeautifier
 
-# elif css['rel'][0] == "stylesheet":
-#        css['href'] = '{{url_for(\'static\', filename = \'css/' + \
-#            splitext(basename(css['href']))[0] + \
-#            splitext(basename(css['href']))[1] + '\')}}'
+
 
 
 formats = ['.png', '.bmp', '.jpg', '.jpeg',
@@ -88,16 +85,10 @@ for i in list_dir:
     else:
         shutil.copytree(path + "\\" + i, target_dir + '\\static\\' + i)
 
+
 Flask_code = Flask_code + \
     """if __name__ == \"__main__\":\n    app.run(debug=True)"""
 
-# print(Flask_code)
-# exit(0)
-
-
-### f = open('index.html', 'r')
-### html_in = f.read()
-# f.close()
 
 
 key_iterator = -1
@@ -164,15 +155,3 @@ for template in list(htmls.values()):
 f = open(target_dir + "\\main.py", 'x')
 f.write(Flask_code)
 f.close()
-
-# TODO add Flask file generator
-# TODO popraw ścieżki plików; zamiast np.zmieniać assets/css/xd.css na static/css/xd.css, zmieniać na
-#      static/assets/css/xd.css
-
-# TODO encapsulate
-
-#             |||
-# return this VVV jak już będzie klasa xddD
-
-
-####html_out = str(soup)
